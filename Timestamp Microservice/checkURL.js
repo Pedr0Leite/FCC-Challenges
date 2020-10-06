@@ -1,7 +1,9 @@
 var checkURL = (timeValue) => { 
     var regex = /\d{5,}/g;
     var onlyNumbers = regex.test(timeValue);
-    let dateValue = new Date(timeValue);
+    var dateValue;
+    (timeValue != "" && typeof timeValue != undefined) ? dateValue = new Date(timeValue) : dateValue = new Date();
+    console.log('dateValue :', dateValue);
     if(onlyNumbers){
         var timeData = {
             unix: parseInt(timeValue),
@@ -9,14 +11,15 @@ var checkURL = (timeValue) => {
     }
     return timeData;
     }
-    if(dateValue.toString() === "Invalid Date"){
+
+    if(dateValue.toString() === "Invalid Date" && timeValue != ""){
         return {error: "Invalid Date"};
     }else{
-        var timeData = {
+        var secondTimeData = {
             unix: dateValue.valueOf(),
             utc: dateValue.toUTCString()
     }
-    return timeData;
+    return secondTimeData;
 }
 }
 

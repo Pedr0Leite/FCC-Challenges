@@ -14,12 +14,10 @@ app.get("/", function (req, res) {
 
 
 app.get("/api/timestamp/:date_string?", function (req, res) {
-  console.log(req.params.date_string)
-  console.log(typeof req.params.date_string)
+  let dateString = req.params.date_string;
   try{
-    res.json(checkURL(req.params.date_string));
+    (dateString == undefined) ? (res.json(checkURL(""))) : (res.json(checkURL(dateString)));
   }catch(err){
-    res.json({"error" : "Invalid Date" })
     console.error(err);
   }
 });
