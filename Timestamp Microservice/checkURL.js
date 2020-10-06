@@ -1,30 +1,23 @@
-var moment = require('./node_modules/moment');
-
-var checkURL = (timeValue) => {
-    var regex = /^[0-9]+$/g;
+var checkURL = (timeValue) => { 
+    var regex = /\d{5,}/g;
     var onlyNumbers = regex.test(timeValue);
-    if(timeValue == "" || timeValue == undefined){
+    let dateValue = new Date(timeValue);
+    if(onlyNumbers){
         var timeData = {
-            unix: new Date().getTime(),
-            utc: new Date().toUTCString()
-        }
-        return timeData;
-    }else if(onlyNumbers){
-        var timeData = {
-            unix: timeValue,
-            utc: moment.unix(timeValue / 1000).format("llll")
-        }
-        return timeData;
-    }else if(!onlyNumbers){
-        var timeData = {
-            unix: moment(timeValue).valueOf(),
-            utc: moment(timeValue).format("llll")
-        }
-        return timeData;
-    }else{
-        var timeData = {"error" : "Invalid Date" };
-        return timeData;
+            unix: parseInt(timeValue),
+            utc: new Date(parseInt(timeValue)).toUTCString()
     }
+    return timeData;
+    }
+    if(dateValue.toString() === "Invalid Date"){
+        return {error: "Invalid Date"};
+    }else{
+        var timeData = {
+            unix: dateValue.valueOf(),
+            utc: dateValue.toUTCString()
+    }
+    return timeData;
+}
 }
 
 module.exports = checkURL;
