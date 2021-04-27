@@ -7,4 +7,10 @@ module.exports = function (app) {
       
     });
     
+    // https://stock-price-checker-proxy.freecodecamp.rocks/v1/stock/[symbol]/quote
+
+    app.get('/user/:id', function(req, res) {
+      res.send('user' + req.params.id);    
+    });
+    
 };
