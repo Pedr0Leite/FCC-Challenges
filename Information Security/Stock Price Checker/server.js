@@ -19,7 +19,7 @@ app.use(helmetjs.frameguard({ action: "deny" }));
 app.use(helmetjs.xssFilter());
 app.use(helmetjs.noSniff());
 app.use(helmetjs.dnsPrefetchControl());
-app.use(helmetjs.noCache());
+// app.use(helmetjs.noCache());
 app.use(helmetjs.ieNoOpen());
 app.use(
   helmetjs.contentSecurityPolicy({

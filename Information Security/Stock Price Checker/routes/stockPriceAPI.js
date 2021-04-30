@@ -46,11 +46,9 @@ module.exports = function (app) {
       addStock.findOne(
         { stock_name: stock},
         (err, record) => {
-          if (err) {
-            console.log("findOne err: ", err);
-          // } else if (!err && record && record['ips'] && record['ips'].includes(req.ip)) {
-          } else if (!err && record['ips'].includes(req.ip)) {
-            return res.send('Error!! Only one like per IP allowed per Stock, sorry!');
+          console.log('req.ip :', req.ip);
+          if (!err && record && record['ips'] && record['ips'].includes(req.ip)) {
+          return res.json('Error!! Only one like per IP allowed per Stock, sorry!');
           }else{
             //Make sure only one like on a stock per IP, add IP to DB
             let addLikeToStock = {
@@ -107,7 +105,7 @@ module.exports = function (app) {
     };
 
     if (typeof req.query.stock === "string") {
-      console.log('ONE STOCKS');
+      console.log('ONE STOCKS PART');
       //query one stock
       let stockNameFromQuery = req.query.stock;
       
@@ -125,7 +123,7 @@ module.exports = function (app) {
     } else if (Array.isArray(req.query.stock)) {
       //query two stocks
       search2stocks = true;
-      console.log('TWO STOCKS');
+      console.log('TWO STOCKS PART');
       //Stock 1
       let stockNameFromQueryOne = req.query.stock[0];
       if(req.query.like == "true"){

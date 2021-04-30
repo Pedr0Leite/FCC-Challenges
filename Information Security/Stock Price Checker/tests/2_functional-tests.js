@@ -9,8 +9,9 @@ suite('Functional Tests', function() {
 
     //access the URL
     suite('GET /api/stock-prices => stockData object', ()=>{
+
         //Test First Stock without the Like
-        test('One Stock without like', ()=>{
+        test('One Stock without like', (done)=>{
             chai.request(server).get('/api/stock-prices')
             .query({stock: 'goog'})
             .end((err,res)=>{
@@ -20,8 +21,9 @@ suite('Functional Tests', function() {
                 done();
             });
         });
+
         //Test First Stock with the Like
-        test('One Stock with like', ()=>{
+        test('One Stock with like', (done)=>{
             chai.request(server).get('/api/stock-prices')
             .query({stock: 'msft', like:true})
             .end((err,res)=>{
@@ -33,39 +35,70 @@ suite('Functional Tests', function() {
         });
         
         //Test One like per Stock per Ip
-        test('One like per stock per IP', ()=>{
+        test('One like per stock per IP', (done)=>{
             chai.request(server).get('/api/stock-prices')
-            .query({stock: 'msft', like:true})
+            .query({stock: 'goog', like:true})
             .end((err,res)=>{
+            console.log('res :', res.body);
                 assert.equal(res.body, 'Error!! Only one like per IP allowed per Stock, sorry!');
                 done();
             });
         });
         
-        //Test Second Stock
-        test('Two Stocks', ()=>{
-            chai.request(server).get('/api/stock-prices')
-            .query({stock: ['msft', 'goog'], like:true})
-            .end((err,res)=>{
-                let stockData = res.body.stockData;
-                if(stockData[0]['stock'] === 'msft'){
-                    assert.equal(res.body['stockData'][0]['stock'], 'msft')
-                    assert.equal(res.body['stockData'][0]['likes'], 1)
-                    assert.equal(res.body['stockData'][0]['rel_likes'], 0)
-                    assert.equal(res.body['stockData'][1]['stock'], 'goog')
-                    assert.equal(res.body['stockData'][1]['likes'], 1)
-                    assert.equal(res.body['stockData'][1]['rel_likes'], 0)
-                }else{
-                    assert.equal(res.body['stockData'][1]['stock'], 'msft')
-                    assert.equal(res.body['stockData'][1]['likes'], 1)
-                    assert.equal(res.body['stockData'][1]['rel_likes'], 0)
-                    assert.equal(res.body['stockData'][0]['stock'], 'goog')
-                    assert.equal(res.body['stockData'][0]['likes'], 1)
-                    assert.equal(res.body['stockData'][0]['rel_likes'], 0)
-                }
-                done();
-            });
-        });
-    })
+        //Test Two Stock
+        test('Two stocks', function(done) {
+        chai.request(server)
+        .get('/api/stock-prices')
+        .query({stock: ['aapl', 'amzn']})
+        .end(function(err, res){
+          let stockData = res.body['stockData']
+          assert.isArray(stockData)
+          /* Stocks can come in either order */
+          if(stockData[0]['stock'] === 'aapl'){
+            assert.equal(stockData[0]['stock'], 'aapl')
+            assert.equal(stockData[0]['likes'], 0)
+            assert.equal(stockData[0]['rel_likes'], 0)
 
+            assert.equal(stockData[1]['stock'], 'amzn')
+            assert.equal(stockData[1]['likes'], 0)
+            assert.equal(stockData[1]['rel_likes'], 0)
+          }else{
+            assert.equal(stockData[1]['stock'], 'aapl')
+            assert.equal(stockData[1]['likes'], 0)
+            assert.equal(stockData[1]['rel_likes'], 0)
+
+            assert.equal(stockData[0]['stock'], 'amzn')
+            assert.equal(stockData[0]['likes'], 0)
+            assert.equal(stockData[0]['rel_likes'], 0)
+          }
+          done()
+        });
+      });
+
+        //Test Two Stocks with likes 
+        test('Two stocks with like', function(finish) {
+            chai.request(server)
+            .get('/api/stock-prices')
+            .query({stock: ['spot', 'amzn'], like: true})
+            .end(function(err, res){
+              let stockData = res.body.stockData
+              if(stockData[0]['stock'] === 'spot'){
+                assert.equal(stockData[0]['stock'], 'spot')
+                assert.equal(stockData[0]['likes'], 1)
+                assert.equal(stockData[0]['rel_likes'], 0)
+                assert.equal(stockData[1]['stock'], 'amzn')
+                assert.equal(stockData[1]['likes'], 1)
+                assert.equal(stockData[1]['rel_likes'], 0)
+              }else{
+                assert.equal(stockData[1]['stock'], 'spot')
+                assert.equal(stockData[1]['likes'], 1)
+                assert.equal(stockData[1]['rel_likes'], 0)
+                assert.equal(stockData[0]['stock'], 'amzn')
+                assert.equal(stockData[0]['likes'], 1)
+                assert.equal(stockData[0]['rel_likes'], 0)
+              }
+              finish()
+            });
+          });
+    });
 });

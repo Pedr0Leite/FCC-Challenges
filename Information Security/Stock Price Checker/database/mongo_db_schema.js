@@ -5,7 +5,7 @@ const schemas = {
 addStockSchema: new mongoose.Schema({
     stock_name: { type: String, required: true },
     likes: { type: Number, default: 0 },
-    ips: {type: String},
+    ips: [String],
     date: {type: Date},
   })
 };
