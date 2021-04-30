@@ -24,7 +24,7 @@ app.use(helmetjs.ieNoOpen());
 app.use(
   helmetjs.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
       styleSrc: ["'self'"],
     },
   })

@@ -8,7 +8,7 @@ const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 module.exports = function (app) {
   app.route("/api/stock-prices").get(function (req, res) {
     let responseObj = {};
-    responseObj["stocksInfo"] = {};
+    responseObj["stockData"] = {};
 
     let stocks = [];
 
@@ -79,21 +79,31 @@ module.exports = function (app) {
 
     //First Stock response
     let getFirstStock = (record, callbackF) => {
-      responseObj["stocksInfo"]["stock"] = record["stock_name"];
-      responseObj["stocksInfo"]["price"] = record["price"];
-      responseObj["stocksInfo"]["likes"] = record["likes"];
-      responseObj["stocksInfo"]["companyName"] = record["company_name"];
+      responseObj["stockData"]["stock"] = record["stock_name"];
+      responseObj["stockData"]["price"] = record["price"];
+      responseObj["stockData"]["likes"] = record["likes"];
+      responseObj["stockData"]["companyName"] = record["company_name"];
       callbackF();
     };
-
+    
     //Sercond Stock response
     let getSecondStock = (record, callbackF) => {
       let secondStock = {};
-      secondStock["stocksInfo"]["stock"] = record["stock_name"];
-      secondStock["stocksInfo"]["price"] = record["price"];
-      secondStock["stocksInfo"]["likes"] = record["likes"];
-      secondStock["stocksInfo"]["companyName"] = record["company_name"];
-      callbackF();
+      secondStock["stock"] = record["stock_name"];
+      secondStock["price"] = record["price"];
+      secondStock["likes"] = record["likes"];
+      secondStock["companyName"] = record["company_name"];
+      stocks.push(secondStock);
+      //if there are two stocks, calculate the difference between both likes
+      if(stocks.length == 2){
+        stocks[0]['rel_likes'] = stocks[0]['likes'] - stocks[1]['likes'];
+        stocks[1]['rel_likes'] = stocks[1]['likes'] - stocks[0]['likes'];
+        responseObj['stockData'] = stocks;
+        callbackF();
+      }else{
+        //else, do nothing
+        return
+      }
     };
 
     if (typeof req.query.stock === "string") {
