@@ -39,7 +39,7 @@ suite('Functional Tests', function() {
             chai.request(server).get('/api/stock-prices')
             .query({stock: 'goog', like:true})
             .end((err,res)=>{
-            console.log('res :', res.body);
+            // console.log('res :', res.body);
                 assert.equal(res.body, 'Error!! Only one like per IP allowed per Stock, sorry!');
                 done();
             });
@@ -81,20 +81,21 @@ suite('Functional Tests', function() {
             .get('/api/stock-prices')
             .query({stock: ['spot', 'amzn'], like: true})
             .end(function(err, res){
+            console.log('res :', res.body);
               let stockData = res.body.stockData
               if(stockData[0]['stock'] === 'spot'){
                 assert.equal(stockData[0]['stock'], 'spot')
-                assert.equal(stockData[0]['likes'], 1)
+                assert.equal(stockData[0]['likes'], 0)
                 assert.equal(stockData[0]['rel_likes'], 0)
                 assert.equal(stockData[1]['stock'], 'amzn')
-                assert.equal(stockData[1]['likes'], 1)
+                assert.equal(stockData[1]['likes'], 0)
                 assert.equal(stockData[1]['rel_likes'], 0)
               }else{
                 assert.equal(stockData[1]['stock'], 'spot')
-                assert.equal(stockData[1]['likes'], 1)
+                assert.equal(stockData[1]['likes'], 0)
                 assert.equal(stockData[1]['rel_likes'], 0)
                 assert.equal(stockData[0]['stock'], 'amzn')
-                assert.equal(stockData[0]['likes'], 1)
+                assert.equal(stockData[0]['likes'], 0)
                 assert.equal(stockData[0]['rel_likes'], 0)
               }
               finish()

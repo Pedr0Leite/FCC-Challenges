@@ -46,7 +46,7 @@ module.exports = function (app) {
       addStock.findOne(
         { stock_name: stock},
         (err, record) => {
-          console.log('req.ip :', req.ip);
+          // console.log('req.ip :', req.ip);
           if (!err && record && record['ips'] && record['ips'].includes(req.ip)) {
           return res.json('Error!! Only one like per IP allowed per Stock, sorry!');
           }else{
