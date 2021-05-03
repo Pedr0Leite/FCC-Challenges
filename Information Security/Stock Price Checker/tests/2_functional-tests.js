@@ -37,7 +37,7 @@ suite('Functional Tests', function() {
         //Test One like per Stock per Ip
         test('One like per stock per IP', (done)=>{
             chai.request(server).get('/api/stock-prices')
-            .query({stock: 'goog', like:true})
+            .query({stock: 'amzn', like:true})
             .end((err,res)=>{
             // console.log('res :', res.body);
                 assert.equal(res.body, 'Error!! Only one like per IP allowed per Stock, sorry!');
@@ -79,23 +79,23 @@ suite('Functional Tests', function() {
         test('Two stocks with like', function(finish) {
             chai.request(server)
             .get('/api/stock-prices')
-            .query({stock: ['spot', 'amzn'], like: true})
+            .query({stock: ['nflx', 'orcl'], like: true})
             .end(function(err, res){
-            console.log('res :', res.body);
               let stockData = res.body.stockData
-              if(stockData[0]['stock'] === 'spot'){
-                assert.equal(stockData[0]['stock'], 'spot')
-                assert.equal(stockData[0]['likes'], 0)
+              // console.log('res :', res.body);
+              if(stockData[0]['stock'] === 'nflx'){
+                assert.equal(stockData[0]['stock'], 'nflx')
+                assert.equal(stockData[0]['likes'], 1)
                 assert.equal(stockData[0]['rel_likes'], 0)
-                assert.equal(stockData[1]['stock'], 'amzn')
-                assert.equal(stockData[1]['likes'], 0)
+                assert.equal(stockData[1]['stock'], 'orcl')
+                assert.equal(stockData[1]['likes'], 1)
                 assert.equal(stockData[1]['rel_likes'], 0)
               }else{
-                assert.equal(stockData[1]['stock'], 'spot')
-                assert.equal(stockData[1]['likes'], 0)
+                assert.equal(stockData[1]['stock'], 'nflx')
+                assert.equal(stockData[1]['likes'], 1)
                 assert.equal(stockData[1]['rel_likes'], 0)
-                assert.equal(stockData[0]['stock'], 'amzn')
-                assert.equal(stockData[0]['likes'], 0)
+                assert.equal(stockData[0]['stock'], 'orcl')
+                assert.equal(stockData[0]['likes'], 1)
                 assert.equal(stockData[0]['rel_likes'], 0)
               }
               finish()
