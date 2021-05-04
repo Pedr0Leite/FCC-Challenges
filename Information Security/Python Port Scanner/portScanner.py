@@ -1,6 +1,8 @@
 #!/usr/bin/python3
+#Import libraries
 import socket, argparse, sys, nmap
 
+#Scanner
 scanner = nmap.PortScanner()
 
 print('Lets start the scan!')
