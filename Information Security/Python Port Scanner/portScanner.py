@@ -8,6 +8,7 @@ scanner = nmap.PortScanner()
 print('Lets start the scan!')
 print('<------------------------------------------>')
 
+#first input
 ipAddress = input("Please, enter an IP address or website to scan: ")
 print("The IP Address is: ", ipAddress)
 type(ipAddress)
