@@ -3,6 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+
+//Security package
 const helmetjs = require("helmet");
 
 const stockRoutes = require("./routes/stockPriceAPI.js");
@@ -53,7 +55,7 @@ app.use(function (req, res, next) {
 });
 
 //Start our server and tests!
-app.listen(process.env.PORT || 3000, function () {
+app.listen(process.env.PORT || 1337, function () {
   console.log("Listening on port " + process.env.PORT);
   if (process.env.NODE_ENV === "test") {
     console.log("Running Tests...");
