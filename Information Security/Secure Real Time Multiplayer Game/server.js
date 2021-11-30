@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const expect = require('chai');
+var cors = require('cors')
 const socket = require('socket.io');
 const helmet = require('helmet');
 
@@ -21,6 +22,7 @@ app.use(helmet.noSniff());
 app.use(helmet.xssFilter());
 app.use(helmet.noCache());
 app.use(helmet.hidePoweredBy({ setTo: 'PHP 7.4.3' }));
+app.use(cors({origin: '*'}));
 
 // Index page (static HTML)
 app.route('/')
